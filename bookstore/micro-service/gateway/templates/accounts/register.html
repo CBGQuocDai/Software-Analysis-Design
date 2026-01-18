@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-md mx-auto">
+    <div class="bg-white p-10 rounded-[2.5rem] shadow-xl shadow-slate-200/60 border border-slate-100">
+        <div class="text-center mb-10">
+            <h2 class="text-3xl font-black text-slate-900 tracking-tight">Tạo tài khoản</h2>
+        </div>
+
+        <form method="post" class="space-y-5">
+            {% csrf_token %}
+            
+            <div class="modern-form-container">
+                {{ form.as_p }}
+            </div>
+
+            <button class="w-full bg-indigo-600 text-white py-4 rounded-2xl font-bold text-lg hover:bg-indigo-700 transition shadow-lg shadow-indigo-100 transform active:scale-[0.98] mt-4">
+                Đăng ký ngay
+            </button>
+        </form>
+
+        <div class="mt-8 pt-8 border-t border-slate-100 text-center text-sm">
+            <span class="text-slate-500">Bạn đã có tài khoản?</span>
+            <a href="/accounts/login/" class="text-indigo-600 font-bold ml-1 hover:underline transition">Đăng nhập tại đây</a>
+        </div>
+    </div>
+
+    <p class="text-center text-slate-400 text-xs mt-8 px-6">
+        Bằng cách đăng ký, bạn đồng ý với các Điều khoản dịch vụ và Chính sách bảo mật của Modern Bookstore.
+    </p>
+</div>
+
+<style>
+    /* CSS đồng bộ để làm đẹp Django form.as_p */
+    .modern-form-container p { 
+        margin-bottom: 1.25rem; 
+    }
+    
+    .modern-form-container label { 
+        display: block; 
+        font-size: 0.75rem; 
+        font-weight: 700; 
+        text-transform: uppercase; 
+        color: #94a3b8; 
+        margin-bottom: 0.5rem; 
+        margin-left: 0.25rem;
+    }
+    
+    .modern-form-container input { 
+        width: 100%; 
+        background: #f8fafc; 
+        border: 1px solid #e2e8f0; 
+        padding: 0.875rem 1rem; 
+        border-radius: 1rem; 
+        outline: none; 
+        transition: all 0.2s ease;
+        color: #1e293b;
+    }
+    
+    .modern-form-container input:focus { 
+        border-color: #6366f1; 
+        background: white; 
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1); 
+    }
+
+    /* Hiển thị lỗi form (nếu có) một cách tinh tế */
+    .errorlist {
+        color: #ef4444;
+        font-size: 0.75rem;
+        margin-bottom: 1rem;
+        list-style: none;
+        padding-left: 0;
+    }
+</style>
+{% endblock %}

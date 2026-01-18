@@ -1,76 +1,67 @@
-import json
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 
 from .models import Customer
+from .serializers import CustomerSerializer, CustomerPublicSerializer
 
 
 # POST /api/customers/register/
-@csrf_exempt
-def register(request):
-    if request.method != "POST":
-        return JsonResponse({"error": "Method not allowed"}, status=405)
+class RegisterAPI(APIView):
 
-    data = json.loads(request.body)
+    def post(self, request):
+        serializer = CustomerSerializer(data=request.data)
 
-    name = data.get("name")
-    email = data.get("email")
-    password = data.get("password")
+        if serializer.is_valid():
+            customer = serializer.save()
 
-    if not all([name, email, password]):
-        return JsonResponse({"error": "Missing fields"}, status=400)
+            public_serializer = CustomerPublicSerializer(customer)
 
-    if Customer.objects.filter(email=email).exists():
-        return JsonResponse({"error": "Email already exists"}, status=400)
+            return Response(
+                public_serializer.data,
+                status=status.HTTP_201_CREATED
+            )
 
-    customer = Customer.objects.create(
-        name=name,
-        email=email,
-        password=password
-    )
-
-    return JsonResponse({
-        "id": customer.id,
-        "name": customer.name,
-        "email": customer.email
-    })
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # POST /api/customers/login/
-@csrf_exempt
-def login(request):
-    if request.method != "POST":
-        return JsonResponse({"error": "Method not allowed"}, status=405)
+class LoginAPI(APIView):
 
-    data = json.loads(request.body)
+    def post(self, request):
+        email = request.data.get("email")
+        password = request.data.get("password")
 
-    email = data.get("email")
-    password = data.get("password")
+        if not email or not password:
+            return Response(
+                {"error": "Missing credentials"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
-    try:
-        customer = Customer.objects.get(email=email, password=password)
-    except Customer.DoesNotExist:
-        return JsonResponse({"error": "Invalid credentials"}, status=401)
+        try:
+            customer = Customer.objects.get(email=email, password=password)
+        except Customer.DoesNotExist:
+            return Response(
+                {"error": "Invalid credentials"},
+                status=status.HTTP_401_UNAUTHORIZED
+            )
 
-    return JsonResponse({
-        "id": customer.id,
-        "name": customer.name,
-        "email": customer.email
-    })
+        serializer = CustomerPublicSerializer(customer)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 # GET /api/customers/<id>/
-def customer_detail(request, customer_id):
-    if request.method != "GET":
-        return JsonResponse({"error": "Method not allowed"}, status=405)
+class CustomerDetailAPI(APIView):
 
-    try:
-        customer = Customer.objects.get(id=customer_id)
-    except Customer.DoesNotExist:
-        return JsonResponse({"error": "Customer not found"}, status=404)
+    def get(self, request, customer_id):
+        try:
+            customer = Customer.objects.get(id=customer_id)
+        except Customer.DoesNotExist:
+            return Response(
+                {"error": "Customer not found"},
+                status=status.HTTP_404_NOT_FOUND
+            )
 
-    return JsonResponse({
-        "id": customer.id,
-        "name": customer.name,
-        "email": customer.email
-    })
+        serializer = CustomerPublicSerializer(customer)
+        return Response(serializer.data, status=status.HTTP_200_OK)

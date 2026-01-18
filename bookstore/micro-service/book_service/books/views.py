@@ -15,7 +15,6 @@ class BookListAPI(APIView):
         serializer = BookSerializer(books, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-
 # API 2: GET /api/books/<id>/
 class BookDetailAPI(APIView):
 

@@ -22,7 +22,7 @@
                 </div>
                 <div class="text-right">
                     <span class="block text-[10px] uppercase font-bold text-slate-400">Thành tiền</span>
-                    <span class="text-lg font-bold text-indigo-600">{{ item.book.price* item.quantity }} VNĐ</span>
+                    <span class="text-lg font-bold text-indigo-600"> {% widthratio item.book.price 1 item.quantity%}VNĐ</span>
                 </div>
             </div>
         </div>

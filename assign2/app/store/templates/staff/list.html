@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Staff Directory - BookStore{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <h1 class="text-3xl font-extrabold text-gray-900">Staff Administration</h1>
+        <div class="flex gap-2">
+            <a href="/customers/" class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                <i data-lucide="users" class="mr-2 w-4 h-4 text-gray-500"></i>
+                Manage Customers
+            </a>
+        </div>
+    </div>
+
+    <div class="bg-white shadow overflow-hidden sm:rounded-md border border-gray-200">
+        <ul role="list" class="divide-y divide-gray-200">
+            {% if staff %}
+                {% for s in staff %}
+                <li>
+                    <div class="px-4 py-4 flex items-center sm:px-6 hover:bg-gray-50 cursor-pointer transition-colors">
+                        <div class="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center">
+                                        <i data-lucide="user" class="h-6 w-6 text-indigo-600"></i>
+                                    </div>
+                                </div>
+                                <div class="ml-4">
+                                    <p class="text-sm font-medium text-gray-900 truncate">{{ s.name }}</p>
+                                    <p class="text-sm text-gray-500 flex items-center">
+                                        <i data-lucide="shield-check" class="flex-shrink-0 mr-1.5 h-4 w-4 text-green-400"></i>
+                                        {{ s.role }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ml-5 flex-shrink-0">
+                            <i data-lucide="chevron-right" class="h-5 w-5 text-gray-400"></i>
+                        </div>
+                    </div>
+                </li>
+                {% endfor %}
+            {% else %}
+                <li class="px-4 py-12 text-center">
+                    <i data-lucide="user-minus" class="mx-auto h-12 w-12 text-gray-400"></i>
+                    <p class="mt-2 text-sm text-gray-500">No staff members found.</p>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

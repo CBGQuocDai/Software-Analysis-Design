@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giỏ hàng - Shop</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        header {
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        header h1 {
+            font-size: 28px;
+        }
+        
+        .header-right {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .header-right a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            background-color: #555;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        
+        .header-right a:hover {
+            background-color: #777;
+        }
+        
+        .user-info {
+            color: #ddd;
+            font-size: 14px;
+        }
+        
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .cart-table {
+            width: 100%;
+            background-color: white;
+            border-collapse: collapse;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .cart-table thead {
+            background-color: #34495e;
+            color: white;
+        }
+        
+        .cart-table th {
+            padding: 15px;
+            text-align: left;
+            font-weight: bold;
+        }
+        
+        .cart-table td {
+            padding: 15px;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        .cart-table tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .product-info {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .product-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .product-author {
+            font-size: 13px;
+            color: #666;
+        }
+        
+        .price-cell {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        
+        .quantity-form {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+        
+        .quantity-input {
+            width: 60px;
+            padding: 5px;
+            border: 1px solid #bdc3c7;
+            border-radius: 4px;
+            text-align: center;
+        }
+        
+        .btn-update {
+            padding: 5px 10px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .btn-update:hover {
+            background-color: #229954;
+        }
+        
+        .btn-remove {
+            padding: 8px 12px;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-remove:hover {
+            background-color: #c0392b;
+        }
+        
+        .empty-cart {
+            text-align: center;
+            padding: 60px 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .empty-cart p {
+            color: #666;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        
+        .cart-summary {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        .summary-row:last-child {
+            border-bottom: none;
+        }
+        
+        .summary-label {
+            color: #555;
+            font-weight: bold;
+        }
+        
+        .summary-value {
+            color: #333;
+            font-weight: bold;
+        }
+        
+        .summary-row.total {
+            background-color: #ecf0f1;
+            padding: 15px;
+            margin: 0 -25px;
+            padding: 15px 25px;
+        }
+        
+        .summary-row.total .summary-label,
+        .summary-row.total .summary-value {
+            color: #e74c3c;
+            font-size: 18px;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 10px;
+            justify-content: space-between;
+        }
+        
+        .btn-primary {
+            flex: 1;
+            padding: 12px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-secondary {
+            flex: 1;
+            padding: 12px;
+            background-color: #95a5a6;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🛒 Giỏ hàng</h1>
+            <div class="header-right">
+                <div class="user-info">
+                    Xin chào, <strong>{{ customer.name }}</strong>
+                </div>
+                <a href="{% url 'core:book_list' %}">📚 Tiếp tục mua sắm</a>
+                <a href="{% url 'core:logout' %}">Đăng xuất</a>
+            </div>
+        </header>
+        
+        <h2>Chi tiết giỏ hàng</h2>
+        
+        {% if cart_items %}
+            <table class="cart-table">
+                <thead>
+                    <tr>
+                        <th>Tên sách</th>
+                        <th>Giá</th>
+                        <th>Số lượng</th>
+                        <th>Thành tiền</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in cart_items %}
+                        <tr>
+                            <td>
+                                <div class="product-info">
+                                    <div class="product-title">{{ item.book.title }}</div>
+                                    <div class="product-author">Tác giả: {{ item.book.author }}</div>
+                                </div>
+                            </td>
+                            <td class="price-cell">{{ item.book.price|floatformat:0 }} ₫</td>
+                            <td>
+                                <form method="POST" action="{% url 'core:update_cart_item' customer.id item.id %}" class="quantity-form">
+                                    {% csrf_token %}
+                                    <input type="number" name="quantity" class="quantity-input" value="{{ item.quantity }}" min="1">
+                                    <button type="submit" class="btn-update">Cập nhật</button>
+                                </form>
+                            </td>
+                            <td class="price-cell">{{ item.book.price|floatformat:0|add:0|mul:item.quantity|floatformat:0 }} ₫</td>
+                            <td>
+                                <a href="{% url 'core:remove_from_cart' customer.id item.id %}" class="btn-remove" onclick="return confirm('Bạn chắc chắn muốn xóa?')">Xóa</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+            <div class="cart-summary">
+                <div class="summary-row total">
+                    <span class="summary-label">Tổng tiền:</span>
+                    <span class="summary-value">{{ total_price|floatformat:0 }} ₫</span>
+                </div>
+            </div>
+            
+            <div class="actions">
+                <a href="{% url 'core:book_list' %}" class="btn-secondary">← Tiếp tục mua sắm</a>
+                <button class="btn-primary" onclick="alert('Chức năng thanh toán sẽ được cập nhật')">Thanh toán →</button>
+            </div>
+        {% else %}
+            <div class="empty-cart">
+                <p>Giỏ hàng của bạn trống</p>
+                <a href="{% url 'core:book_list' %}" class="btn-secondary" style="display: inline-block; padding: 12px 30px;">← Tiếp tục mua sắm</a>
+            </div>
+        {% endif %}
+    </div>
+    
+    <script>
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND',
+                minimumFractionDigits: 0
+            }).format(value);
+        }
+    </script>
+</body>
+</html>
